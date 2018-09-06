@@ -74,6 +74,31 @@ define(["jquery",
                        }
 
                }]);
+                
+                var config = Jupyter.notebook.config;
+                if ( !Jupyter.notebook.config.data.dfkernel ) {
+                    var patch = {
+                      dfkernel:{
+                          auto_parse_lib: true,
+                          horizontal_bar : true
+                      }
+                    };
+                    config.update(patch);
+                }
+                var handler =   function () {
+                    if (nb.config.data.dfkernel.horizontal_bar === true) {
+                        nb.config.data.dfkernel.horizontal_bar = false;
+                    } else {
+                        nb.config.data.dfkernel.horizontal_bar = true;
+                    }
+                };
+                var action = {
+                    'handler' : handler
+                };
+                var prefix = 'dfkernel';
+                var action_name = 'toggle-red-bar';
+                var full_action_name = Jupyter.actions.register(action, action_name, prefix);
+                
                 var stylesheet = $('<link rel="stylesheet" type="text/css">');
                 stylesheet.attr('href',require.toUrl("./df-notebook/css/icon.css"));
                 $('head').append(stylesheet);
